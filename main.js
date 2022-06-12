@@ -1,9 +1,3 @@
-/*
-・"Generate random story" ボタンが押された時にバカな話を生成する。
-・バカな話を生成するボタンが押される前に "Enter custom name" のテキストフィールドに名前が入力されていた場合には、既定の "Bob" という名前を入力された名前に置き換える。
-・バカな話を生成するボタンが押される前に UK のラジオボタンがチェックされていた場合のみ、既定の US (米国) の重さと気温を UK (英国) の同等な単位に変換する。
-・ボタンが再度 (何度でも) 押されたら、別のランダムなバカ話を生成する。
-*/
 
 const customName = document.getElementById('customname');
 const randomize = document.querySelector('.randomize');
@@ -22,27 +16,34 @@ let insertZ =['spontaneously combusted','melted into a puddle on the sidewalk','
 randomize.addEventListener('click', result);
 
 function result() {
+  let newStory = storyText;
+
+  let xItem = randomValueFromArray(insertX);
+  let yItem = randomValueFromArray(insertY);
+  let zItem = randomValueFromArray(insertZ);
+
+  newStory = newStory.replace(':insertx:',xItem);
+  newStory = newStory.replace(':inserty:',yItem);
+  newStory = newStory.replace(':insertz:',zItem);
 
   if(customName.value !== '') {
     const name = customName.value;
 /*BOBをnameに入力されたものに置き換えるってのを追加*/
+    newStory = newStory.replaceAll('Bob', name)
   }
 
   if(document.getElementById("uk").checked) {
-    const weight = Math.round(300);
-    const temperature =  Math.round(94);
-
+    const weight = `${Math.round(300/14)}　stone`;
+    const temperature = `${Math.round((94 - 32) * 5/9)} centigrade`;
+    newStory = newStory.replaceAll('94 fahrenheit' , temperature);
+    newStory = newStory.replaceAll('300 pounds' , weight);
   }
 
-  story.textContent = ;
+  story.textContent = newStory;
   story.style.visibility = 'visible';
 }
 
-let newStory = storyText;
-let xItem = randomValueFromArray(insertX);
-let yItem = randomValueFromArray(insertY);
-let zItem = randomValueFromArray(insertZ);
-
-newStory = newstory.replace(':insertx:',xItem);
-newStory = newstory.replace(':inserty:',YItem);
-newStory = newstory.replace(':insertz:',zItem);
+/*
+・テンプレートリテリアル
+・replaceAll
+*/
